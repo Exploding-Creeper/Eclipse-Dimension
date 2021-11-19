@@ -1,0 +1,16 @@
+accessWidener v1 named
+accessible field net/minecraft/world/gen/StructureAccessor world Lnet/minecraft/world/WorldAccess;
+extendable method net/minecraft/client/world/GeneratorType <init> (Ljava/lang/String;)V
+accessible method net/minecraft/world/gen/chunk/ChunkGeneratorSettings <init> (Lnet/minecraft/world/gen/chunk/StructuresConfig;Lnet/minecraft/world/gen/chunk/GenerationShapeConfig;Lnet/minecraft/block/BlockState;Lnet/minecraft/block/BlockState;IIIIZZZZZZ)V
+accessible field net/minecraft/world/gen/chunk/NoiseChunkGenerator horizontalNoiseResolution I
+accessible field net/minecraft/world/gen/chunk/NoiseChunkGenerator verticalNoiseResolution I
+accessible field net/minecraft/world/gen/chunk/NoiseChunkGenerator noiseColumnSampler Lnet/minecraft/world/gen/NoiseColumnSampler;
+accessible field net/minecraft/world/gen/NoiseColumnSampler biomeSource Lnet/minecraft/world/biome/source/BiomeSource;
+accessible field net/minecraft/world/gen/NoiseColumnSampler field_34344 Lnet/minecraft/util/math/noise/DoublePerlinNoiseSampler;
+accessible field net/minecraft/world/gen/NoiseColumnSampler topSlideSize D
+accessible field net/minecraft/world/gen/NoiseColumnSampler topSlideOffset D
+accessible field net/minecraft/world/gen/NoiseColumnSampler topSlideTarget D
+accessible field net/minecraft/world/gen/NoiseColumnSampler bottomSlideSize D
+accessible field net/minecraft/world/gen/NoiseColumnSampler bottomSlideOffset D
+accessible field net/minecraft/world/gen/NoiseColumnSampler bottomSlideTarget D
+accessible field net/minecraft/world/gen/chunk/NoiseChunkGenerator settings Ljava/util/function/Supplier;

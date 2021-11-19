@@ -18,6 +18,10 @@ repositories {
 	// for more information about repositories.
 }
 
+minecraft {
+	accessWidener =  file("src/main/resources/eclipse.accesswidener")
+}
+
 dependencies {
 	// To change the versions see the gradle.properties file
 	minecraft "com.mojang:minecraft:${project.minecraft_version}"

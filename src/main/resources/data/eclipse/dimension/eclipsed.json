@@ -1,0 +1,69 @@
+{
+  "type": "eclipse:eclipsed",
+  "generator": {
+    "type": "eclipse:eclipse",
+    "seed": 0,
+    "settings": {
+      "name": "eclipse:eclipsed",
+      "bedrock_roof_position": -64,
+      "bedrock_floor_position": 0,
+      "sea_level": 60,
+      "min_surface_level": 70,
+      "disable_mob_generation": false,
+      "noise_caves_enabled": true,
+      "noodle_caves_enabled": true,
+      "aquifers_enabled": false,
+      "deepslate_enabled": true,
+      "ore_veins_enabled": false,
+      "default_block": {
+        "Name": "minecraft:grass_block",
+        "Properties": {
+          "snowy": "false"
+        }
+      },
+      "default_fluid": {
+        "Name": "minecraft:water",
+        "Properties": {
+          "level": "0"
+        }
+      },
+      "noise": {
+        "min_y": 0,
+        "height": 384,
+        "density_factor": 1,
+        "density_offset": -0.46875,
+        "size_horizontal": 1,
+        "size_vertical": 2,
+        "simplex_surface_noise": true,
+        "random_density_offset": true,
+        "island_noise_override": false,
+        "amplified": false,
+        "sampling": {
+          "xz_scale": 0.9999999814507745,
+          "y_scale": 0.9999999814507745,
+          "xz_factor": 80,
+          "y_factor": 160
+        },
+        "bottom_slide": {
+          "target": -30,
+          "size": 0,
+          "offset": 0
+        },
+        "top_slide": {
+          "target": -10,
+          "size": 3,
+          "offset": 0
+        }
+      },
+      "structures": {
+        "structures": {}
+      }
+    },
+    "biome_source": {
+      "type": "minecraft:vanilla_layered",
+      "seed": 0,
+      "large_biomes": false,
+      "legacy_biome_init_layer": false
+    }
+  }
+}
