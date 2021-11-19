@@ -2,12 +2,10 @@ package com.mystic.eclipse.worldgen.chunkgenerators;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import io.netty.handler.ssl.JdkAlpnApplicationProtocolNegotiator;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.client.world.GeneratorType;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.noise.DoublePerlinNoiseSampler;
 import net.minecraft.util.math.noise.NoiseSampler;
@@ -17,7 +15,6 @@ import net.minecraft.util.registry.Registry;
 import net.minecraft.world.ChunkRegion;
 import net.minecraft.world.HeightLimitView;
 import net.minecraft.world.Heightmap;
-import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.source.BiomeCoords;
 import net.minecraft.world.biome.source.BiomeSource;
@@ -39,6 +36,7 @@ public class SplitChunkGenerator extends ChunkGenerator{
     private final int horizontalNoiseResolution, verticalNoiseResolution;
     private final BlockState defaultBlock = Blocks.BLACKSTONE.getDefaultState(); //TODO Replace with Dark Stone Blocks
     private final BlockState defaultBlockTwo = Blocks.BONE_BLOCK.getDefaultState(); //TODO Replace with Light Stone Blocks
+    private final BlockState defaultBlockThree = Blocks.TUFF.getDefaultState(); //TODO Replace with Twilight Stone Blocks
     private final GenerationShapeConfig generationShapeConfig;
     private final double densityFactor, densityOffset;
     private final NoiseSampler surfaceDepthNoise;
@@ -77,7 +75,7 @@ public class SplitChunkGenerator extends ChunkGenerator{
 
         ChunkRandom chunkRandom = new ChunkRandom(seed);
 
-        this.surfaceDepthNoise = (NoiseSampler)(generationShapeConfig.hasSimplexSurfaceNoise() ? new OctaveSimplexNoiseSampler(chunkRandom, IntStream.rangeClosed(-3, 0)) : new OctavePerlinNoiseSampler(chunkRandom, IntStream.rangeClosed(-3, 0)));
+        this.surfaceDepthNoise = generationShapeConfig.hasSimplexSurfaceNoise() ? new OctaveSimplexNoiseSampler(chunkRandom, IntStream.rangeClosed(-3, 0)) : new OctavePerlinNoiseSampler(chunkRandom, IntStream.rangeClosed(-3, 0));
     }
 
     @Override
@@ -92,7 +90,7 @@ public class SplitChunkGenerator extends ChunkGenerator{
 
     @Override
     public void buildSurface(ChunkRegion region, Chunk chunk) {
-        ChunkPos chunkPos = chunk.getPos();
+        /*ChunkPos chunkPos = chunk.getPos();
         int chunkX = chunkPos.x;
         int chunkZ = chunkPos.z;
         ChunkRandom chunkRandom = new ChunkRandom();
@@ -115,14 +113,26 @@ public class SplitChunkGenerator extends ChunkGenerator{
                 biome.buildSurface(chunkRandom, chunk, x, z, surfaceHeight, noise, this.defaultBlock, Blocks.WATER.getDefaultState(), this.getSeaLevel(), s, region.getSeed());
             }
         }
+
+        for (int xOffset = 0; xOffset < 16; ++xOffset) {
+            for (int yOffset = 0; yOffset < 16; ++yOffset) {
+                int x = baseX + xOffset;
+                int z = baseZ + yOffset;
+                int surfaceHeight = chunk.sampleHeightmap(Heightmap.Type.WORLD_SURFACE_WG, xOffset, yOffset) + 1;
+                double noise = this.surfaceDepthNoise.sample((double) x * d, (double) z * d, d, (double) xOffset * d) * 15.0D;
+                mutable.set(x, -64, z);
+                int height = getHeight(mutable.getX(), mutable.getZ(), Heightmap.Type.OCEAN_FLOOR_WG, region);
+                int s = height - 16;
+                Biome biome = region.getBiome(mutable.setY(surfaceHeight));
+                biome.buildSurface(chunkRandom, chunk, x, z, surfaceHeight, noise, this.defaultBlockTwo, Blocks.WATER.getDefaultState(), this.getSeaLevel(), s, region.getSeed());
+            }
+        }*/
     }
 
     @Override
     public CompletableFuture<Chunk> populateNoise(Executor executor, StructureAccessor accessor, Chunk chunk) {
-        if ((chunk.getPos().x) < 0) {
+        if ((chunk.getPos().x * 15) < -16) {
             BlockPos.Mutable mutable = new BlockPos.Mutable();
-            Heightmap heightmapOne = chunk.getHeightmap(Heightmap.Type.WORLD_SURFACE_WG);
-            Heightmap heightmapTwo = chunk.getHeightmap(Heightmap.Type.OCEAN_FLOOR_WG);
 
             int baseX = chunk.getPos().getStartX();
             int baseZ = chunk.getPos().getStartZ();
@@ -140,10 +150,27 @@ public class SplitChunkGenerator extends ChunkGenerator{
             }
 
             return CompletableFuture.completedFuture(chunk);
-        }  else {
+        } else if ((chunk.getPos().x * 15) > -16 && (chunk.getPos().x * 15) < 16) {
             BlockPos.Mutable mutable = new BlockPos.Mutable();
-            Heightmap heightmapOne = chunk.getHeightmap(Heightmap.Type.WORLD_SURFACE_WG);
-            Heightmap heightmapTwo = chunk.getHeightmap(Heightmap.Type.OCEAN_FLOOR_WG);
+
+            int baseX = chunk.getPos().getStartX();
+            int baseZ = chunk.getPos().getStartZ();
+
+            for(int xOffset = 0; xOffset < 16; xOffset++){
+                mutable.setX(xOffset);
+                for(int zOffset = 0; zOffset < 16; zOffset++){
+                    mutable.setZ(zOffset);
+                    int height = getHeight(baseX + xOffset, baseZ + zOffset, null, accessor.world);
+                    for(int y = chunk.getBottomY(); y < height; y++){
+                        mutable.setY(y);
+                        chunk.setBlockState(mutable, defaultBlockThree, false);
+                    }
+                }
+            }
+
+            return CompletableFuture.completedFuture(chunk);
+        } else {
+            BlockPos.Mutable mutable = new BlockPos.Mutable();
 
             int baseX = chunk.getPos().getStartX();
             int baseZ = chunk.getPos().getStartZ();
