@@ -2,12 +2,15 @@ package com.mystic.eclipse.worldgen.chunkgenerators;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import com.mystic.eclipse.init.BlockInit;
+import com.mystic.eclipse.utils.noise.FastNoiseLite;
+import com.mystic.eclipse.worldgen.surfacebuilders.EclipseSurfaceBuilder;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.client.world.GeneratorType;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.noise.DoublePerlinNoiseSampler;
 import net.minecraft.util.math.noise.NoiseSampler;
 import net.minecraft.util.math.noise.OctavePerlinNoiseSampler;
 import net.minecraft.util.math.noise.OctaveSimplexNoiseSampler;
@@ -24,6 +27,7 @@ import net.minecraft.world.gen.ChunkRandom;
 import net.minecraft.world.gen.StructureAccessor;
 import net.minecraft.world.gen.chunk.*;
 
+import java.util.Random;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
 import java.util.function.Supplier;
@@ -34,12 +38,13 @@ public class SplitChunkGenerator extends ChunkGenerator{
     private final long seed;
     private final Supplier<ChunkGeneratorSettings> settings;
     private final int horizontalNoiseResolution, verticalNoiseResolution;
-    private final BlockState defaultBlock = Blocks.BLACKSTONE.getDefaultState(); //TODO Replace with Dark Stone Blocks
-    private final BlockState defaultBlockTwo = Blocks.BONE_BLOCK.getDefaultState(); //TODO Replace with Light Stone Blocks
-    private final BlockState defaultBlockThree = Blocks.TUFF.getDefaultState(); //TODO Replace with Twilight Stone Blocks
+    private final BlockState defaultBlock = BlockInit.DARK_STONE_BLOCK.getDefaultState();
+    private final BlockState defaultBlockThree = BlockInit.TWILIGHT_STONE_BLOCK.getDefaultState();
+    private final BlockState defaultBlockTwo = BlockInit.LIGHT_STONE_BLOCK.getDefaultState();
     private final GenerationShapeConfig generationShapeConfig;
     private final double densityFactor, densityOffset;
     private final NoiseSampler surfaceDepthNoise;
+    private FastNoiseLite noise;
     public static final GeneratorType eclipse = new GeneratorType("eclipse") {
         @Override
         protected ChunkGenerator getChunkGenerator(Registry<Biome> biomeRegistry, Registry<ChunkGeneratorSettings> chunkGeneratorSettingsRegistry, long seed) {
@@ -47,8 +52,6 @@ public class SplitChunkGenerator extends ChunkGenerator{
             return new SplitChunkGenerator(removeLater, seed, () -> chunkGeneratorSettingsRegistry.get(ChunkGeneratorSettings.OVERWORLD));
         }
     };
-
-    private final DoublePerlinNoiseSampler field_34344 = DoublePerlinNoiseSampler.create(new ChunkRandom(42L), -16, new double[] { 1.0D, 1.0D, 1.0D, 1.0D, 1.0D, 1.0D, 1.0D, 1.0D, 1.0D, 1.0D, 1.0D, 1.0D, 1.0D, 1.0D, 1.0D, 1.0D });
 
     public static final Codec<SplitChunkGenerator> CODEC = RecordCodecBuilder.create(instance ->
             instance.group(
@@ -75,6 +78,11 @@ public class SplitChunkGenerator extends ChunkGenerator{
 
         ChunkRandom chunkRandom = new ChunkRandom(seed);
 
+        noise = new FastNoiseLite(); // Create a FastNoise object
+        noise.SetNoiseType(FastNoiseLite.NoiseType.OpenSimplex2); // Set the desired noise type
+        noise.SetFractalType(FastNoiseLite.FractalType.FBm);
+        noise.SetFractalOctaves(6);
+
         this.surfaceDepthNoise = generationShapeConfig.hasSimplexSurfaceNoise() ? new OctaveSimplexNoiseSampler(chunkRandom, IntStream.rangeClosed(-3, 0)) : new OctavePerlinNoiseSampler(chunkRandom, IntStream.rangeClosed(-3, 0));
     }
 
@@ -90,43 +98,59 @@ public class SplitChunkGenerator extends ChunkGenerator{
 
     @Override
     public void buildSurface(ChunkRegion region, Chunk chunk) {
-        /*ChunkPos chunkPos = chunk.getPos();
+        ChunkPos chunkPos = chunk.getPos();
         int chunkX = chunkPos.x;
         int chunkZ = chunkPos.z;
         ChunkRandom chunkRandom = new ChunkRandom();
+        Random random = new Random();
         chunkRandom.setTerrainSeed(chunkX, chunkZ);
         int baseX = chunkPos.getStartX();
         int baseZ = chunkPos.getStartZ();
         double d = 0.0625D;
         BlockPos.Mutable mutable = new BlockPos.Mutable();
-
-        for (int xOffset = 0; xOffset < 16; ++xOffset) {
-            for (int yOffset = 0; yOffset < 16; ++yOffset) {
-                int x = baseX + xOffset;
-                int z = baseZ + yOffset;
-                int surfaceHeight = chunk.sampleHeightmap(Heightmap.Type.WORLD_SURFACE_WG, xOffset, yOffset) + 1;
-                double noise = this.surfaceDepthNoise.sample((double) x * d, (double) z * d, d, (double) xOffset * d) * 15.0D;
-                mutable.set(x, -64, z);
-                int height = getHeight(mutable.getX(), mutable.getZ(), Heightmap.Type.OCEAN_FLOOR_WG, region);
-                int s = height - 16;
-                Biome biome = region.getBiome(mutable.setY(surfaceHeight));
-                biome.buildSurface(chunkRandom, chunk, x, z, surfaceHeight, noise, this.defaultBlock, Blocks.WATER.getDefaultState(), this.getSeaLevel(), s, region.getSeed());
+        if((chunk.getPos().x * 15) < -16) {
+            for (int xOffset = 0; xOffset < 16; ++xOffset) {
+                for (int yOffset = 0; yOffset < 16; ++yOffset) {
+                    int x = baseX + xOffset;
+                    int z = baseZ + yOffset;
+                    int surfaceHeight = chunk.sampleHeightmap(Heightmap.Type.WORLD_SURFACE_WG, xOffset, yOffset) + 1;
+                    double noise = this.surfaceDepthNoise.sample((double) x * d, (double) z * d, d, (double) xOffset * d) * 15.0D;
+                    mutable.set(x, -64, z);
+                    int height = getHeight(mutable.getX(), mutable.getZ(), Heightmap.Type.OCEAN_FLOOR_WG, region);
+                    int s = height - 16;
+                    Biome biome = region.getBiome(mutable.setY(surfaceHeight));
+                    EclipseSurfaceBuilder.buildSurface(random, chunk, biome, x, z, surfaceHeight, noise, this.defaultBlock, Blocks.WATER.getDefaultState(), Blocks.TUFF.getDefaultState(), Blocks.GRAVEL.getDefaultState(), Blocks.SANDSTONE.getDefaultState(), getSeaLevel());
+                }
+            }
+        } else if ((chunk.getPos().x * 15) > -16 && (chunk.getPos().x * 15) < 16) {
+            for (int xOffset = 0; xOffset < 16; ++xOffset) {
+                for (int yOffset = 0; yOffset < 16; ++yOffset) {
+                    int x = baseX + xOffset;
+                    int z = baseZ + yOffset;
+                    int surfaceHeight = chunk.sampleHeightmap(Heightmap.Type.WORLD_SURFACE_WG, xOffset, yOffset) + 1;
+                    double noise = this.surfaceDepthNoise.sample((double) x * d, (double) z * d, d, (double) xOffset * d) * 15.0D;
+                    mutable.set(x, -64, z);
+                    int height = getHeight(mutable.getX(), mutable.getZ(), Heightmap.Type.OCEAN_FLOOR_WG, region);
+                    int s = height - 16;
+                    Biome biome = region.getBiome(mutable.setY(surfaceHeight));
+                    EclipseSurfaceBuilder.buildSurface(random, chunk, biome, x, z, surfaceHeight, noise, this.defaultBlockThree, Blocks.WATER.getDefaultState(), Blocks.DIORITE.getDefaultState(), Blocks.DEEPSLATE.getDefaultState(), Blocks.GRANITE.getDefaultState(), getSeaLevel());
+                }
+            }
+        } else {
+            for (int xOffset = 0; xOffset < 16; ++xOffset) {
+                for (int yOffset = 0; yOffset < 16; ++yOffset) {
+                    int x = baseX + xOffset;
+                    int z = baseZ + yOffset;
+                    int surfaceHeight = chunk.sampleHeightmap(Heightmap.Type.WORLD_SURFACE_WG, xOffset, yOffset) + 1;
+                    double noise = this.surfaceDepthNoise.sample((double) x * d, (double) z * d, d, (double) xOffset * d) * 15.0D;
+                    mutable.set(x, -64, z);
+                    int height = getHeight(mutable.getX(), mutable.getZ(), Heightmap.Type.OCEAN_FLOOR_WG, region);
+                    int s = height - 16;
+                    Biome biome = region.getBiome(mutable.setY(surfaceHeight));
+                    EclipseSurfaceBuilder.buildSurface(random, chunk, biome, x, z, surfaceHeight, noise, this.defaultBlockTwo, Blocks.WATER.getDefaultState(), Blocks.CALCITE.getDefaultState(), Blocks.STONE.getDefaultState(), Blocks.DIRT.getDefaultState(), getSeaLevel());
+                }
             }
         }
-
-        for (int xOffset = 0; xOffset < 16; ++xOffset) {
-            for (int yOffset = 0; yOffset < 16; ++yOffset) {
-                int x = baseX + xOffset;
-                int z = baseZ + yOffset;
-                int surfaceHeight = chunk.sampleHeightmap(Heightmap.Type.WORLD_SURFACE_WG, xOffset, yOffset) + 1;
-                double noise = this.surfaceDepthNoise.sample((double) x * d, (double) z * d, d, (double) xOffset * d) * 15.0D;
-                mutable.set(x, -64, z);
-                int height = getHeight(mutable.getX(), mutable.getZ(), Heightmap.Type.OCEAN_FLOOR_WG, region);
-                int s = height - 16;
-                Biome biome = region.getBiome(mutable.setY(surfaceHeight));
-                biome.buildSurface(chunkRandom, chunk, x, z, surfaceHeight, noise, this.defaultBlockTwo, Blocks.WATER.getDefaultState(), this.getSeaLevel(), s, region.getSeed());
-            }
-        }*/
     }
 
     @Override
@@ -192,8 +216,9 @@ public class SplitChunkGenerator extends ChunkGenerator{
     }
 
     @Override
-    public int getHeight(int actualX, int actualZ, Heightmap.Type heightmap, HeightLimitView world) {
-        return 70; //TODO make in noisy!!!
+    public int getHeight(int x, int z, Heightmap.Type heightmap, HeightLimitView world) {
+        float noiseVal = ((noise.GetNoise(x, 65, z) + 1) / 2) * 30.0f;
+        return (int) (noiseVal + 70);
     }
 
     @Override

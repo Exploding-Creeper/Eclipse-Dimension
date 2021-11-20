@@ -2,6 +2,7 @@ package com.mystic.eclipse.worldgen.dimension;
 
 import com.mojang.serialization.Codec;
 import com.mystic.eclipse.worldgen.chunkgenerators.SplitChunkGenerator;
+import com.mystic.eclipse.worldgen.surfacebuilders.EclipseSurfaceBuilderRegistery;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Identifier;
@@ -28,5 +29,9 @@ public class EclipseDimension {
             EclipseDimension.ECLIPSE_TYPE = server.getRegistryManager().get(Registry.DIMENSION_TYPE_KEY).get(ECLIPSE_DIMENSION_TYPE_KEY);
             EclipseDimension.ECLIPSE_DIMENSION = server.getWorld(ECLIPSE_WORLD);
         });
+    }
+
+    public static void setupSurfaceBuilders(){
+        EclipseSurfaceBuilderRegistery.registerSurfaceBuilders();
     }
 }

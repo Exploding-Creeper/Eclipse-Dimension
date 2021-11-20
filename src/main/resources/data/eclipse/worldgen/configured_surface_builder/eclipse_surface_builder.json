@@ -1,0 +1,15 @@
+{
+  "type": "eclipse:eclipse_surface_builder",
+  "config": {
+    "top_material": {
+      "Name": "minecraft:tuff",
+      "Properties": {}
+    },
+    "under_material": {
+      "Name": "minecraft:gravel"
+    },
+    "underwater_material": {
+      "Name": "minecraft:sandstone"
+    }
+  }
+}

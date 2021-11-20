@@ -21,6 +21,9 @@
       "default_block_two": {
         "Name": "minecraft:dirt"
       },
+      "default_block_three": {
+        "Name": "minecraft:tuff"
+      },
       "default_fluid": {
         "Name": "minecraft:water",
         "Properties": {
