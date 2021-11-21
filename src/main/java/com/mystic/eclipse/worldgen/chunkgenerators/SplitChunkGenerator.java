@@ -119,7 +119,7 @@ public class SplitChunkGenerator extends ChunkGenerator{
                     int height = getHeight(mutable.getX(), mutable.getZ(), Heightmap.Type.OCEAN_FLOOR_WG, region);
                     int s = height - 16;
                     Biome biome = region.getBiome(mutable.setY(surfaceHeight));
-                    EclipseSurfaceBuilder.buildSurface(random, chunk, biome, x, z, surfaceHeight, noise, this.defaultBlock, Blocks.WATER.getDefaultState(), Blocks.TUFF.getDefaultState(), Blocks.GRAVEL.getDefaultState(), Blocks.SANDSTONE.getDefaultState(), getSeaLevel());
+                    EclipseSurfaceBuilder.buildSurface(random, chunk, biome, x, z, surfaceHeight, noise, this.defaultBlock, Blocks.WATER.getDefaultState(), BlockInit.DARK_GRASS_BLOCK.getDefaultState(), BlockInit.DARK_DIRT_BLOCK.getDefaultState(), BlockInit.DARK_DIRT_BLOCK.getDefaultState(), getSeaLevel());
                 }
             }
         } else if ((chunk.getPos().x * 15) > -16 && (chunk.getPos().x * 15) < 16) {
@@ -133,7 +133,7 @@ public class SplitChunkGenerator extends ChunkGenerator{
                     int height = getHeight(mutable.getX(), mutable.getZ(), Heightmap.Type.OCEAN_FLOOR_WG, region);
                     int s = height - 16;
                     Biome biome = region.getBiome(mutable.setY(surfaceHeight));
-                    EclipseSurfaceBuilder.buildSurface(random, chunk, biome, x, z, surfaceHeight, noise, this.defaultBlockThree, Blocks.WATER.getDefaultState(), Blocks.DIORITE.getDefaultState(), Blocks.DEEPSLATE.getDefaultState(), Blocks.GRANITE.getDefaultState(), getSeaLevel());
+                    EclipseSurfaceBuilder.buildSurface(random, chunk, biome, x, z, surfaceHeight, noise, this.defaultBlockThree, Blocks.WATER.getDefaultState(), BlockInit.TWILIGHT_GRASS_BLOCK.getDefaultState(), BlockInit.TWILIGHT_DIRT_BLOCK.getDefaultState(), BlockInit.TWILIGHT_DIRT_BLOCK.getDefaultState(), getSeaLevel());
                 }
             }
         } else {
@@ -147,7 +147,7 @@ public class SplitChunkGenerator extends ChunkGenerator{
                     int height = getHeight(mutable.getX(), mutable.getZ(), Heightmap.Type.OCEAN_FLOOR_WG, region);
                     int s = height - 16;
                     Biome biome = region.getBiome(mutable.setY(surfaceHeight));
-                    EclipseSurfaceBuilder.buildSurface(random, chunk, biome, x, z, surfaceHeight, noise, this.defaultBlockTwo, Blocks.WATER.getDefaultState(), Blocks.CALCITE.getDefaultState(), Blocks.STONE.getDefaultState(), Blocks.DIRT.getDefaultState(), getSeaLevel());
+                    EclipseSurfaceBuilder.buildSurface(random, chunk, biome, x, z, surfaceHeight, noise, this.defaultBlockTwo, Blocks.WATER.getDefaultState(), BlockInit.LIGHT_GRASS_BLOCK.getDefaultState(), BlockInit.LIGHT_DIRT_BLOCK.getDefaultState(), BlockInit.LIGHT_DIRT_BLOCK.getDefaultState(), getSeaLevel());
                 }
             }
         }

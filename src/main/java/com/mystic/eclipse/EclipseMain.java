@@ -10,14 +10,12 @@ import com.mystic.eclipse.worldgen.dimension.EclipseDimension;
 import net.fabricmc.api.ModInitializer;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
-import net.minecraft.world.gen.chunk.NoiseChunkGenerator;
 
 public class EclipseMain implements ModInitializer {
 
 	public static Identifier id(String id) {
 		return new Identifier(Reference.MODID, id);
 	}
-
 
 	@Override
 	public void onInitialize() {
@@ -29,6 +27,4 @@ public class EclipseMain implements ModInitializer {
 		EclipseDimension.setupSurfaceBuilders();
 		EclipseDimension.init();
 	}
-
-
 }

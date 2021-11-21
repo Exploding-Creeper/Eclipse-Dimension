@@ -1,0 +1,5 @@
+{
+  "variants": {
+    "": { "model": "eclipse:block/dark_grass_block" }
+  }
+}
