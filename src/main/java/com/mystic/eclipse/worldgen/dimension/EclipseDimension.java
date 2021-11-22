@@ -1,6 +1,8 @@
 package com.mystic.eclipse.worldgen.dimension;
 
 import com.mojang.serialization.Codec;
+import com.mystic.eclipse.utils.Reference;
+import com.mystic.eclipse.worldgen.biomes.EclipseBiomeSource;
 import com.mystic.eclipse.worldgen.chunkgenerators.SplitChunkGenerator;
 import com.mystic.eclipse.worldgen.surfacebuilders.EclipseSurfaceBuilderRegistery;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
@@ -33,5 +35,9 @@ public class EclipseDimension {
 
     public static void setupSurfaceBuilders(){
         EclipseSurfaceBuilderRegistery.registerSurfaceBuilders();
+    }
+
+    public static void registerBiomeSources() {
+        Registry.register(Registry.BIOME_SOURCE, new Identifier(Reference.MODID, "eclipse_biome_source"), EclipseBiomeSource.CODEC);
     }
 }
