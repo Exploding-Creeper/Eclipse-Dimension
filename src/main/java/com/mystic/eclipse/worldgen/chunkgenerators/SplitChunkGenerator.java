@@ -108,7 +108,8 @@ public class SplitChunkGenerator extends ChunkGenerator{
         int baseZ = chunkPos.getStartZ();
         double d = 0.0625D;
         BlockPos.Mutable mutable = new BlockPos.Mutable();
-        if((chunk.getPos().x * 15) < -16) {
+        int blockPos = chunk.getPos().x * 15;
+        if(blockPos <= -16) {
             for (int xOffset = 0; xOffset < 16; ++xOffset) {
                 for (int yOffset = 0; yOffset < 16; ++yOffset) {
                     int x = baseX + xOffset;
@@ -122,7 +123,7 @@ public class SplitChunkGenerator extends ChunkGenerator{
                     EclipseSurfaceBuilder.buildSurface(random, chunk, biome, x, z, surfaceHeight, noise, this.defaultBlock, Blocks.WATER.getDefaultState(), BlockInit.DARK_GRASS_BLOCK.getDefaultState(), BlockInit.DARK_DIRT_BLOCK.getDefaultState(), BlockInit.DARK_DIRT_BLOCK.getDefaultState(), getSeaLevel());
                 }
             }
-        } else if ((chunk.getPos().x * 15) > -16 && (chunk.getPos().x * 15) < 16) {
+        } else if (blockPos > -16 && blockPos < 15) {
             for (int xOffset = 0; xOffset < 16; ++xOffset) {
                 for (int yOffset = 0; yOffset < 16; ++yOffset) {
                     int x = baseX + xOffset;
@@ -136,7 +137,7 @@ public class SplitChunkGenerator extends ChunkGenerator{
                     EclipseSurfaceBuilder.buildSurface(random, chunk, biome, x, z, surfaceHeight, noise, this.defaultBlockThree, Blocks.WATER.getDefaultState(), BlockInit.TWILIGHT_GRASS_BLOCK.getDefaultState(), BlockInit.TWILIGHT_DIRT_BLOCK.getDefaultState(), BlockInit.TWILIGHT_DIRT_BLOCK.getDefaultState(), getSeaLevel());
                 }
             }
-        } else {
+        } else if (blockPos >= 15) {
             for (int xOffset = 0; xOffset < 16; ++xOffset) {
                 for (int yOffset = 0; yOffset < 16; ++yOffset) {
                     int x = baseX + xOffset;
@@ -155,7 +156,8 @@ public class SplitChunkGenerator extends ChunkGenerator{
 
     @Override
     public CompletableFuture<Chunk> populateNoise(Executor executor, StructureAccessor accessor, Chunk chunk) {
-        if ((chunk.getPos().x * 15) < -16) {
+        int blockPos = chunk.getPos().x * 15;
+        if (blockPos <= -16) {
             BlockPos.Mutable mutable = new BlockPos.Mutable();
 
             int baseX = chunk.getPos().getStartX();
@@ -174,7 +176,7 @@ public class SplitChunkGenerator extends ChunkGenerator{
             }
 
             return CompletableFuture.completedFuture(chunk);
-        } else if ((chunk.getPos().x * 15) > -16 && (chunk.getPos().x * 15) < 16) {
+        } else if (blockPos > -16 && blockPos < 15) {
             BlockPos.Mutable mutable = new BlockPos.Mutable();
 
             int baseX = chunk.getPos().getStartX();
@@ -193,7 +195,7 @@ public class SplitChunkGenerator extends ChunkGenerator{
             }
 
             return CompletableFuture.completedFuture(chunk);
-        } else {
+        } else if (blockPos >= 15) {
             BlockPos.Mutable mutable = new BlockPos.Mutable();
 
             int baseX = chunk.getPos().getStartX();
@@ -211,6 +213,9 @@ public class SplitChunkGenerator extends ChunkGenerator{
                 }
             }
 
+            return CompletableFuture.completedFuture(chunk);
+        } else {
+            //Do nothing really here!
             return CompletableFuture.completedFuture(chunk);
         }
     }

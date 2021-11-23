@@ -26,7 +26,8 @@ public class EclipseBiomeLayer implements InitLayer {
 
     public int sample(LayerRandomnessSource noise, int x, int z) {
         double perlinNoise = perlinGen.sample(x * 0.055D, z * 0.055D, false);
-        if(x * 15 < -16) {
+        int blockPos = x * 15;
+        if(blockPos <= -16) {
             if (perlinNoise > 0.30) {
                 return this.dynamicRegistry.getRawId(this.dynamicRegistry.get(EclipseBiomeSource.DESOLATE_CITY_BIOME));
             } else if (perlinNoise > 0.20 && perlinNoise < 0.30) {
@@ -36,9 +37,9 @@ public class EclipseBiomeLayer implements InitLayer {
             } else {
                 return this.dynamicRegistry.getRawId(this.dynamicRegistry.get(EclipseBiomeSource.DARK_CAVE_BIOME));
             }
-        } else if (x * 15 > -16 && x * 15 < 16) {
+        } else if (blockPos > -16 && blockPos < 15) {
             return this.dynamicRegistry.getRawId(this.dynamicRegistry.get(EclipseBiomeSource.TWILIGHT_ZONE_BIOME));
-        } else {
+        } else if (blockPos >= 15) {
             if (perlinNoise > 0.30) {
                 return this.dynamicRegistry.getRawId(this.dynamicRegistry.get(EclipseBiomeSource.SKY_CITY_BIOME));
             } else if (perlinNoise > 0.20 && perlinNoise < 0.30) {
@@ -48,6 +49,9 @@ public class EclipseBiomeLayer implements InitLayer {
             } else {
                 return this.dynamicRegistry.getRawId(this.dynamicRegistry.get(EclipseBiomeSource.CLOUD_BIOME));
             }
+        } else {
+            //Do nothing biome here!
+            return this.dynamicRegistry.getRawId(this.dynamicRegistry.get(EclipseBiomeSource.TWILIGHT_ZONE_BIOME));
         }
     }
 

@@ -22,7 +22,7 @@ public class EclipseDimension {
     public static DimensionType ECLIPSE_TYPE;
     public static ServerWorld ECLIPSE_DIMENSION;
 
-    public static boolean isAtlantisDimension(World world) {
+    public static boolean isEclipseDimension(World world) {
         return world != null && world.getRegistryKey().equals(ECLIPSE_WORLD);
     }
 

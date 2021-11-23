@@ -4,7 +4,9 @@
   "package": "com.mystic.eclipse.mixin",
   "compatibilityLevel": "JAVA_16",
   "mixins": [
-    "LayerAccessor"
+    "com.mystic.eclipse.lighting.ClientLightMixin",
+    "LayerAccessor",
+    "SkylightMixin"
   ],
   "client": [
     "GeneratorTypeAccessor"

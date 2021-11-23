@@ -14,3 +14,10 @@ accessible field net/minecraft/world/gen/NoiseColumnSampler bottomSlideSize D
 accessible field net/minecraft/world/gen/NoiseColumnSampler bottomSlideOffset D
 accessible field net/minecraft/world/gen/NoiseColumnSampler bottomSlideTarget D
 accessible field net/minecraft/world/gen/chunk/NoiseChunkGenerator settings Ljava/util/function/Supplier;
+accessible method net/minecraft/world/chunk/light/ChunkLightProvider getStateForLighting (JLorg/apache/commons/lang3/mutable/MutableInt;)Lnet/minecraft/block/BlockState;
+accessible method net/minecraft/world/chunk/light/ChunkLightProvider getOpaqueShape (Lnet/minecraft/block/BlockState;JLnet/minecraft/util/math/Direction;)Lnet/minecraft/util/shape/VoxelShape;
+accessible class net/minecraft/world/chunk/light/SkyLightStorage$Data
+accessible field net/minecraft/world/chunk/light/SkyLightStorage$Data columnToTopSection Lit/unimi/dsi/fastutil/longs/Long2IntOpenHashMap;
+accessible field net/minecraft/world/chunk/light/SkyLightStorage$Data minSectionY I
+accessible method net/minecraft/world/chunk/light/SkyLightStorage isSectionEnabled (J)Z
+accessible field net/minecraft/world/chunk/light/LightStorage chunkProvider Lnet/minecraft/world/chunk/ChunkProvider;
