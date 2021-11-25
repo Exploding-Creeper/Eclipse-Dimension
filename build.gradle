@@ -18,8 +18,8 @@ repositories {
 	// for more information about repositories.
 }
 
-minecraft {
-	accessWidener =  file("src/main/resources/eclipse.accesswidener")
+loom {
+	accessWidenerPath =  file("src/main/resources/eclipse.accesswidener")
 }
 
 dependencies {

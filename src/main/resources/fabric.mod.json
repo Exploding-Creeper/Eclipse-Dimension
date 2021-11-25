@@ -25,6 +25,7 @@
   "mixins": [
     "eclipse.mixins.json"
   ],
+  "accessWidener": "eclipse.accesswidener",
 
   "depends": {
     "fabricloader": ">=0.11.3",
