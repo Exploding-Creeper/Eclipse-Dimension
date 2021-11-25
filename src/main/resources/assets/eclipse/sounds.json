@@ -1,0 +1,22 @@
+{
+  "whitewash": {
+    "catagory": "records",
+    "subtitle": "subtitles.eclipse.whitewash",
+    "sounds": [
+      {
+        "name": "eclipse:whitewash",
+        "stream": true
+      }
+    ]
+  },
+  "dawnlight": {
+    "catagory": "records",
+    "subtitle": "subtitles.eclipse.dawnlight",
+    "sounds": [
+      {
+        "name": "eclipse:dawnlight",
+        "stream": true
+      }
+    ]
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "subtitles.eclipse.dawnlight": "Now Playing: LudoCrypt - dawnlight",
+  "subtitles.eclipse.whitewash": "Now Playing: LudoCrypt - whitewash",
+  "item.eclipse.whitewash": "Music Disc",
+  "item.eclipse.whitewash.desc": "LudoCrypt - whitewash",
+  "item.eclipse.dawnlight": "Music Disc",
+  "item.eclipse.dawnlight.desc": "LudoCrypt - dawnlight",
+  "itemGroup.eclipse.general": "The Eclipse",
+  "block.eclipse.dark_stone": "Dark Stone",
+  "block.eclipse.twilight_stone": "Twilight Stone",
+  "block.eclipse.light_stone": "Light Stone",
+  "block.eclipse.dark_dirt": "Dark Dirt",
+  "block.eclipse.light_dirt": "Light Dirt",
+  "block.eclipse.twilight_dirt": "Twilight Dirt",
+  "block.eclipse.dark_grass_block": "Dark Grass Block",
+  "block.eclipse.twilight_grass_block": "Twilight Grass Block",
+  "block.eclipse.light_grass_block": "Light Grass Block"
+}

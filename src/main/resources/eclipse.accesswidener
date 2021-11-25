@@ -21,3 +21,17 @@ accessible field net/minecraft/world/chunk/light/SkyLightStorage$Data columnToTo
 accessible field net/minecraft/world/chunk/light/SkyLightStorage$Data minSectionY I
 accessible method net/minecraft/world/chunk/light/SkyLightStorage isSectionEnabled (J)Z
 accessible field net/minecraft/world/chunk/light/LightStorage chunkProvider Lnet/minecraft/world/chunk/ChunkProvider;
+extendable class net/minecraft/world/chunk/light/ChunkSkyLightProvider
+accessible method net/minecraft/world/chunk/light/LightStorage hasSection (J)Z
+accessible method net/minecraft/world/chunk/light/LightStorage getLightSection (J)Lnet/minecraft/world/chunk/ChunkNibbleArray;
+accessible method net/minecraft/world/chunk/light/SkyLightStorage method_31931 (JZ)I
+accessible method net/minecraft/world/chunk/light/LightStorage updateAll ()V
+accessible method net/minecraft/world/chunk/light/SkyLightStorage isAtOrAboveTopmostSection (J)Z
+accessible method net/minecraft/world/chunk/light/SkyLightStorage isAboveMinHeight (I)Z
+accessible method net/minecraft/world/chunk/light/LightStorage getLightSection (J)Lnet/minecraft/world/chunk/ChunkNibbleArray;
+accessible method net/minecraft/world/chunk/light/LightStorage getLightSection (Lnet/minecraft/world/chunk/ChunkToNibbleArrayMap;J)Lnet/minecraft/world/chunk/ChunkNibbleArray;
+accessible method net/minecraft/world/chunk/light/LightStorage getLightSection (JZ)Lnet/minecraft/world/chunk/ChunkNibbleArray;
+accessible method net/minecraft/world/chunk/light/ChunkLightingView getLightSection (Lnet/minecraft/util/math/ChunkSectionPos;)Lnet/minecraft/world/chunk/ChunkNibbleArray;
+accessible method net/minecraft/world/dimension/DimensionType checkHeight (Lnet/minecraft/world/dimension/DimensionType;)Lcom/mojang/serialization/DataResult;
+extendable class net/minecraft/world/chunk/light/ChunkBlockLightProvider
+accessible method net/minecraft/world/chunk/light/ChunkBlockLightProvider getLightSourceLuminance (J)I
