@@ -16,10 +16,18 @@ public class EclipseChunkSkylightProvider extends ChunkSkyLightProvider {
     }
 
     public static int getLightLevel(int x) {
-        if (x <= -16) {
+        if (x < - 16) {
             return 15;
-        } else if (x < 16) {
-            return 7;
+        } else if (x <  -15) {
+            return 12;
+        } else if (x < -14) {
+            return 9;
+        } else if (x < 13) {
+            return 8;
+        } else if (x < 14) {
+            return 6;
+        } else if (x < 15) {
+            return 3;
         } else {
             return 0;
         }
