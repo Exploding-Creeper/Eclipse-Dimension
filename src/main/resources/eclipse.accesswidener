@@ -6,7 +6,6 @@ accessible field net/minecraft/world/gen/chunk/NoiseChunkGenerator horizontalNoi
 accessible field net/minecraft/world/gen/chunk/NoiseChunkGenerator verticalNoiseResolution I
 accessible field net/minecraft/world/gen/chunk/NoiseChunkGenerator noiseColumnSampler Lnet/minecraft/world/gen/NoiseColumnSampler;
 accessible field net/minecraft/world/gen/NoiseColumnSampler biomeSource Lnet/minecraft/world/biome/source/BiomeSource;
-accessible field net/minecraft/world/gen/NoiseColumnSampler field_34344 Lnet/minecraft/util/math/noise/DoublePerlinNoiseSampler;
 accessible field net/minecraft/world/gen/NoiseColumnSampler topSlideSize D
 accessible field net/minecraft/world/gen/NoiseColumnSampler topSlideOffset D
 accessible field net/minecraft/world/gen/NoiseColumnSampler topSlideTarget D

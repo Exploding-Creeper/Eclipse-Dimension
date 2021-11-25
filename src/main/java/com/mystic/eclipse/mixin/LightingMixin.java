@@ -1,6 +1,8 @@
 package com.mystic.eclipse.mixin;
 
 import com.mystic.eclipse.lighting.EclipseChunkSkylightProvider;
+import com.mystic.eclipse.worldgen.dimension.EclipseDimension;
+import net.minecraft.world.World;
 import net.minecraft.world.chunk.ChunkProvider;
 import net.minecraft.world.chunk.light.ChunkLightProvider;
 import net.minecraft.world.chunk.light.LightingProvider;
@@ -19,6 +21,8 @@ public class LightingMixin {
 
     @Inject(at = @At("TAIL"), method = "<init>")
     public void init(ChunkProvider chunkProvider, boolean hasBlockLight, boolean hasSkyLight, CallbackInfo ci){
-        this.skyLightProvider = hasSkyLight ? new EclipseChunkSkylightProvider(chunkProvider) : null;
+        if (EclipseDimension.isEclipseDimension((World) chunkProvider.getWorld())) {
+            this.skyLightProvider = hasSkyLight ? new EclipseChunkSkylightProvider(chunkProvider) : null;
+        }
     }
 }
