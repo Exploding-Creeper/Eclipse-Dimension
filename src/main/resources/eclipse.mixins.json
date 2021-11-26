@@ -4,8 +4,9 @@
   "package": "com.mystic.eclipse.mixin",
   "compatibilityLevel": "JAVA_16",
   "mixins": [
+    "BlockRenderViewMixin",
     "LayerAccessor",
-    "LightingMixin"
+    "LightingProviderMixin"
   ],
   "client": [
     "GeneratorTypeAccessor"

@@ -27,6 +27,10 @@ public class EclipseDimension {
         return world != null && world.getRegistryKey().equals(ECLIPSE_WORLD);
     }
 
+    public static boolean isEclipseDimension(RegistryKey<World> worldRegistryKey) {
+        return worldRegistryKey != null && worldRegistryKey.equals(ECLIPSE_WORLD);
+    }
+
     public static void init() {
         ServerLifecycleEvents.SERVER_STARTED.register(server -> {
             EclipseDimension.ECLIPSE_TYPE = server.getRegistryManager().get(Registry.DIMENSION_TYPE_KEY).get(ECLIPSE_DIMENSION_TYPE_KEY);

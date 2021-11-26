@@ -34,3 +34,5 @@ accessible method net/minecraft/world/chunk/light/ChunkLightingView getLightSect
 accessible method net/minecraft/world/dimension/DimensionType checkHeight (Lnet/minecraft/world/dimension/DimensionType;)Lcom/mojang/serialization/DataResult;
 extendable class net/minecraft/world/chunk/light/ChunkBlockLightProvider
 accessible method net/minecraft/world/chunk/light/ChunkBlockLightProvider getLightSourceLuminance (J)I
+accessible field net/minecraft/client/render/chunk/ChunkRendererRegion world Lnet/minecraft/world/World;
+extendable method net/minecraft/world/chunk/light/LevelPropagator getPropagatedLevel (JJI)I
