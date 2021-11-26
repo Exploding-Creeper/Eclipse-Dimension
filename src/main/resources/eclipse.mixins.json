@@ -1,17 +1,18 @@
 {
-  "required": true,
-  "minVersion": "0.8",
-  "package": "com.mystic.eclipse.mixin",
-  "compatibilityLevel": "JAVA_16",
-  "mixins": [
-    "BlockRenderViewMixin",
-    "LayerAccessor",
-    "LightingProviderMixin"
-  ],
-  "client": [
-    "GeneratorTypeAccessor"
-  ],
-  "injectors": {
-    "defaultRequire": 1
-  }
+	"required": true,
+	"minVersion": "0.8",
+	"package": "com.mystic.eclipse.mixin",
+	"compatibilityLevel": "JAVA_16",
+	"mixins": [
+		"LayerAccessor",
+		"LightingProviderMixin"
+	],
+	"client": [
+		"GeneratorTypeAccessor",
+		"WorldRendererMixin",
+		"DimensionEffectsMixin"
+	],
+	"injectors": {
+		"defaultRequire": 1
+	}
 }

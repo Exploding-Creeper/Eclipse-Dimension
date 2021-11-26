@@ -1,8 +1,8 @@
 package com.mystic.eclipse.init;
 
-import com.mystic.eclipse.items.WhitewashMusicDisc;
-import com.mystic.eclipse.sounds.EclipseSoundEvents;
+import com.mystic.eclipse.items.EclipseMusicDiscItem;
 import com.mystic.eclipse.utils.Reference;
+
 import net.minecraft.item.Item;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.Rarity;
@@ -18,6 +18,7 @@ public class ItemInit {
     private static final Item.Settings ECLIPSE_SETTINGS = new Item.Settings().maxCount(1).rarity(Rarity.UNCOMMON).maxCount(1);
 
     //MUSIC DISC
-    public static final Item WHITEWASH_DISC = register("whitewash", new WhitewashMusicDisc(15, EclipseSoundEvents.WHITEWASH, ECLIPSE_SETTINGS));
-    public static final Item DAWNLIGHT_DISC = register("dawnlight", new WhitewashMusicDisc(7, EclipseSoundEvents.DAWNLIGHT, ECLIPSE_SETTINGS));
+    public static final Item WHITEWASH_DISC = register("whitewash", new EclipseMusicDiscItem(15, SoundInit.WHITEWASH, ECLIPSE_SETTINGS));
+    public static final Item DAWNLIGHT_DISC = register("dawnlight", new EclipseMusicDiscItem(7, SoundInit.DAWNLIGHT, ECLIPSE_SETTINGS));
+    public static final Item DOWNTIME_DISC = register("downtime", new EclipseMusicDiscItem(0, SoundInit.DOWNTIME, ECLIPSE_SETTINGS));
 }

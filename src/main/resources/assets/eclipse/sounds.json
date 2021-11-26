@@ -1,22 +1,29 @@
 {
-  "whitewash": {
-    "catagory": "records",
-    "subtitle": "subtitles.eclipse.whitewash",
-    "sounds": [
-      {
-        "name": "eclipse:whitewash",
-        "stream": true
-      }
-    ]
-  },
-  "dawnlight": {
-    "catagory": "records",
-    "subtitle": "subtitles.eclipse.dawnlight",
-    "sounds": [
-      {
-        "name": "eclipse:dawnlight",
-        "stream": true
-      }
-    ]
-  }
+	"music_disc.whitewash": {
+		"subtitle": "subtitles.eclipse.whitewash",
+		"sounds": [
+			{
+				"name": "eclipse:music/disc/whitewash",
+				"stream": true
+			}
+		]
+	},
+	"music_disc.dawnlight": {
+		"subtitle": "subtitles.eclipse.dawnlight",
+		"sounds": [
+			{
+				"name": "eclipse:music/disc/dawnlight",
+				"stream": true
+			}
+		]
+	},
+	"music_disc.downtime": {
+		"subtitle": "subtitles.eclipse.downtime",
+		"sounds": [
+			{
+				"name": "eclipse:music/disc/downtime",
+				"stream": true
+			}
+		]
+	}
 }

@@ -1,10 +1,13 @@
 {
   "subtitles.eclipse.dawnlight": "Now Playing: LudoCrypt - dawnlight",
   "subtitles.eclipse.whitewash": "Now Playing: LudoCrypt - whitewash",
+  "subtitles.eclipse.downtime": "Now Playing: LudoCrypt - downtime",
   "item.eclipse.whitewash": "Music Disc",
   "item.eclipse.whitewash.desc": "LudoCrypt - whitewash",
   "item.eclipse.dawnlight": "Music Disc",
   "item.eclipse.dawnlight.desc": "LudoCrypt - dawnlight",
+  "item.eclipse.downtime": "Music Disc",
+  "item.eclipse.downtime.desc": "LudoCrypt - downtime",
   "itemGroup.eclipse.general": "The Eclipse",
   "block.eclipse.dark_stone": "Dark Stone",
   "block.eclipse.twilight_stone": "Twilight Stone",
