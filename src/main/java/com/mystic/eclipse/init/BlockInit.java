@@ -2,6 +2,7 @@ package com.mystic.eclipse.init;
 
 import com.mystic.eclipse.blocks.*;
 import com.mystic.eclipse.utils.Reference;
+import net.fabricmc.fabric.api.client.rendering.v1.ColorProviderRegistry;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.minecraft.block.Block;
 import net.minecraft.block.Material;
@@ -14,7 +15,32 @@ import java.util.Objects;
 import java.util.function.Function;
 
 public class BlockInit {
-    public static void init() {}
+    public static void init() {
+        registerBlockTintColors();
+    }
+    //Tint Colors
+    public static void registerBlockTintColors() {
+        ColorProviderRegistry.BLOCK.register((state, world, pos, tintIndex) -> {
+            return 0x707070;
+        }, DARK_DIRT_BLOCK);
+        ColorProviderRegistry.BLOCK.register((state, world, pos, tintIndex) -> {
+            return 0xCDCDCD;
+        }, LIGHT_DIRT_BLOCK);
+        ColorProviderRegistry.BLOCK.register((state, world, pos, tintIndex) -> {
+            return 0x929292;
+        }, TWILIGHT_DIRT_BLOCK);
+        ColorProviderRegistry.BLOCK.register((state, world, pos, tintIndex) -> {
+            return 0x707070;
+        }, DARK_GRASS_BLOCK);
+        ColorProviderRegistry.BLOCK.register((state, world, pos, tintIndex) -> {
+            return 0xCDCDCD;
+        },  LIGHT_GRASS_BLOCK);
+        ColorProviderRegistry.BLOCK.register((state, world, pos, tintIndex) -> {
+            return 0x929292;
+        }, TWILIGHT_GRASS_BLOCK);
+
+    }
+    //Blocks
     public static final DarkStoneBlock DARK_STONE_BLOCK = (DarkStoneBlock) register("dark_stone", new DarkStoneBlock(FabricBlockSettings.of(Material.STONE)));
     public static final LightStoneBlock LIGHT_STONE_BLOCK = (LightStoneBlock) register("light_stone", new LightStoneBlock(FabricBlockSettings.of(Material.STONE)));
     public static final TwilightStoneBlock TWILIGHT_STONE_BLOCK = (TwilightStoneBlock) register("twilight_stone", new TwilightStoneBlock(FabricBlockSettings.of(Material.STONE)));
