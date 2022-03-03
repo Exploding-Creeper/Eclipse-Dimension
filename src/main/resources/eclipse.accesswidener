@@ -36,3 +36,9 @@ extendable class net/minecraft/world/chunk/light/ChunkBlockLightProvider
 accessible method net/minecraft/world/chunk/light/ChunkBlockLightProvider getLightSourceLuminance (J)I
 accessible field net/minecraft/client/render/chunk/ChunkRendererRegion world Lnet/minecraft/world/World;
 extendable method net/minecraft/world/chunk/light/LevelPropagator getPropagatedLevel (JJI)I
+accessible field net/minecraft/world/gen/chunk/NoiseChunkGenerator noiseRegistry Lnet/minecraft/util/registry/Registry;
+accessible field net/minecraft/world/gen/chunk/NoiseChunkGenerator seed J
+accessible class net/minecraft/world/gen/StructureWeightSampler
+accessible method net/minecraft/world/gen/chunk/ChunkGeneratorSettings isMobGenerationDisabled ()Z
+accessible field net/minecraft/world/gen/chunk/ChunkGenerator populationSource Lnet/minecraft/world/biome/source/BiomeSource;
+

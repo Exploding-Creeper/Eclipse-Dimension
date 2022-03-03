@@ -29,8 +29,6 @@ public class EclipseMain implements ModInitializer {
 		EclipseGroup.init();
 		EclipseDimension.registerBiomeSources();
 		Registry.register(Registry.CHUNK_GENERATOR, "eclipse:eclipse", SplitChunkGenerator.CODEC);
-		GeneratorTypeAccessor.getValues().add(SplitChunkGenerator.eclipse);
-		EclipseDimension.setupSurfaceBuilders();
 		EclipseDimension.init();
 	}
 }

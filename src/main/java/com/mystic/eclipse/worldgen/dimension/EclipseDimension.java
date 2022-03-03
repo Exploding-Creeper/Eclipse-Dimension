@@ -1,19 +1,14 @@
 package com.mystic.eclipse.worldgen.dimension;
 
-import com.mojang.serialization.Codec;
 import com.mystic.eclipse.utils.Reference;
 import com.mystic.eclipse.worldgen.biomes.EclipseBiomeSource;
-import com.mystic.eclipse.worldgen.chunkgenerators.SplitChunkGenerator;
-import com.mystic.eclipse.worldgen.surfacebuilders.EclipseSurfaceBuilderRegistery;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.util.registry.RegistryKey;
-import net.minecraft.world.BlockRenderView;
 import net.minecraft.world.World;
 import net.minecraft.world.dimension.DimensionType;
-import net.minecraft.world.gen.chunk.ChunkGenerator;
 
 public class EclipseDimension {
     public static final RegistryKey<World> ECLIPSE_WORLD = RegistryKey.of(Registry.WORLD_KEY, new Identifier("eclipse:eclipsed"));
@@ -36,10 +31,6 @@ public class EclipseDimension {
             EclipseDimension.ECLIPSE_TYPE = server.getRegistryManager().get(Registry.DIMENSION_TYPE_KEY).get(ECLIPSE_DIMENSION_TYPE_KEY);
             EclipseDimension.ECLIPSE_DIMENSION = server.getWorld(ECLIPSE_WORLD);
         });
-    }
-
-    public static void setupSurfaceBuilders(){
-        EclipseSurfaceBuilderRegistery.registerSurfaceBuilders();
     }
 
     public static void registerBiomeSources() {
