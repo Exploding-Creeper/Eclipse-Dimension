@@ -9,9 +9,7 @@ import net.minecraft.util.registry.Registry;
 public class EclipseGroup {
     public static void init(){
         FabricItemGroupBuilder.create(EclipseMain.id("general")).icon(() -> BlockInit.TWILIGHT_STONE_BLOCK.asItem().getDefaultStack()).appendItems((stacks) -> {
-            Registry.ITEM.stream().filter((item) -> {
-                return Registry.ITEM.getId(item).getNamespace().equals("eclipse");
-            }).forEach((item) -> stacks.add(new ItemStack(item)));
+            Registry.ITEM.stream().filter((item) -> Registry.ITEM.getId(item).getNamespace().equals("eclipse")).forEach((item) -> stacks.add(new ItemStack(item)));
         }).build();
     }
 }

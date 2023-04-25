@@ -1,79 +1,159 @@
 package com.mystic.eclipse.worldgen.surfacebuilders;
 
-import com.mojang.serialization.Codec;
+import com.mystic.eclipse.init.BlockInit;
+import com.mystic.eclipse.utils.noise.FastNoiseLite;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
+import net.minecraft.fluid.Fluids;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.ChunkPos;
+import net.minecraft.util.math.random.Random;
+import net.minecraft.util.math.random.RandomSplitter;
+import net.minecraft.util.registry.Registry;
+import net.minecraft.util.registry.RegistryEntry;
+import net.minecraft.world.HeightLimitView;
+import net.minecraft.world.Heightmap;
 import net.minecraft.world.biome.Biome;
+import net.minecraft.world.biome.BiomeKeys;
+import net.minecraft.world.biome.source.BiomeAccess;
 import net.minecraft.world.chunk.Chunk;
+import net.minecraft.world.dimension.DimensionType;
+import net.minecraft.world.gen.HeightContext;
+import net.minecraft.world.gen.chunk.BlockColumn;
+import net.minecraft.world.gen.chunk.ChunkNoiseSampler;
+import net.minecraft.world.gen.densityfunction.DensityFunction;
+import net.minecraft.world.gen.noise.NoiseConfig;
+import net.minecraft.world.gen.noise.NoiseRouter;
+import net.minecraft.world.gen.surfacebuilder.MaterialRules;
 import net.minecraft.world.gen.surfacebuilder.SurfaceBuilder;
-import net.minecraft.world.gen.surfacebuilder.TernarySurfaceConfig;
 
-import java.util.Random;
+import java.util.Objects;
 
-public class EclipseSurfaceBuilder extends SurfaceBuilder<TernarySurfaceConfig> {
-    public EclipseSurfaceBuilder(Codec<TernarySurfaceConfig> codec) {
-        super(codec);
+public class EclipseSurfaceBuilder extends SurfaceBuilder {
+
+    RandomSplitter random;
+    int seaLevel;
+    long seed;
+    BlockState defaultBlock;
+    NoiseConfig noiseRegistry;
+
+    public EclipseSurfaceBuilder(NoiseConfig noiseRegistry1, BlockState defaultState, int seaLevel1, RandomSplitter randomProvider) {
+        super(noiseRegistry1, defaultState, seaLevel1, randomProvider);
+        random = randomProvider;
+        seaLevel = seaLevel1;
+        defaultBlock = defaultState;
+        noiseRegistry = noiseRegistry1;
+    }
+
+
+    public static BlockState getTopMaterial(Chunk chunk) {
+        int blockPos = chunk.getPos().x * 15;
+        if (blockPos <= -16) {
+            return BlockInit.DARK_GRASS_BLOCK.getDefaultState();
+        } else if (blockPos > -16 && blockPos < 15) {
+            return BlockInit.TWILIGHT_GRASS_BLOCK.getDefaultState();
+        } else if (blockPos >= 15) {
+            return BlockInit.LIGHT_GRASS_BLOCK.getDefaultState();
+        }
+        return Blocks.PUMPKIN.getDefaultState();
+    }
+
+    public static BlockState getMidMaterial(Chunk chunk) {
+        int blockPos = chunk.getPos().x * 15;
+        if (blockPos <= -16) {
+            return BlockInit.DARK_DIRT_BLOCK.getDefaultState();
+        } else if (blockPos > -16 && blockPos < 15) {
+            return BlockInit.TWILIGHT_DIRT_BLOCK.getDefaultState();
+        } else if (blockPos >= 15) {
+            return BlockInit.LIGHT_DIRT_BLOCK.getDefaultState();
+        }
+        return Blocks.PUMPKIN.getDefaultState();
+    }
+
+    public static BlockState getBottomMaterial(Chunk chunk) {
+        int blockPos = chunk.getPos().x * 15;
+        if (blockPos <= -16) {
+            return BlockInit.DARK_STONE_BLOCK.getDefaultState();
+        } else if (blockPos > -16 && blockPos < 15) {
+            return BlockInit.TWILIGHT_STONE_BLOCK.getDefaultState();
+        } else if (blockPos >= 15) {
+            return BlockInit.LIGHT_STONE_BLOCK.getDefaultState();
+        }
+        return Blocks.PUMPKIN.getDefaultState();
     }
 
     @Override
-    public void generate(Random random, Chunk chunk, Biome biome, int x, int z, int terrainHeight, double noise, BlockState defaultBlock, BlockState defaultFluid, int seaLevel, int i, long seed, TernarySurfaceConfig config) {
-        this.buildSurface(random, chunk, biome, x, z, terrainHeight, noise, defaultBlock, defaultFluid, config.getTopMaterial(), config.getUnderMaterial(), config.getUnderwaterMaterial(), seaLevel);
-    }
-
-    public static void buildSurface(Random random, Chunk chunk, Biome biome, int x, int z, int terrainHeight, double noise, BlockState defaultBlock, BlockState defaultFluid, BlockState topBlock, BlockState middleBlock, BlockState underwaterBlock, int seaLevel) {
-        BlockPos.Mutable mutable = new BlockPos.Mutable();
-        int depth = -1; // Will be used to know how deep we are in solid blocks so we know when to stop placing middleBlock
-        int scaledNoise = (int)(noise / 3.0D + 3.0D + random.nextDouble() * 0.25D);
-
-        // Start at top land and loop downward
-        for(int y = terrainHeight; y >= 0; --y) {
-
-            // Get the block in the world (Overworld will always give Air, Water, or Stone)
-            mutable.set(x, y, z);
-            BlockState currentBlockInWorld = chunk.getBlockState(mutable);
-
-            // Reset the depth counter as we are not in land anymore
-            if (currentBlockInWorld.isAir()) {
-                depth = -1;
+    public void buildSurface(NoiseConfig noiseConfig, BiomeAccess biomeAccess, Registry<Biome> biomeRegistry, boolean useLegacyRandom, HeightContext heightContext, final Chunk chunk, ChunkNoiseSampler chunkNoiseSampler, MaterialRules.MaterialRule materialRule) {
+        final BlockPos.Mutable mutable = new BlockPos.Mutable();
+        final ChunkPos chunkPos = chunk.getPos();
+        int i = chunkPos.getStartX();
+        int j = chunkPos.getStartZ();
+        BlockColumn blockColumn = new BlockColumn() {
+            public BlockState getState(int y) {
+                return chunk.getBlockState(mutable.setY(y));
             }
 
-            // Else if we are at liquid, we can use this to swap the default fluid in your biome
-            else if (!currentBlockInWorld.getFluidState().isEmpty()) {
-                chunk.setBlockState(mutable,defaultFluid, false);
+            public void setState(int y, BlockState state) {
+                HeightLimitView heightLimitView = chunk.getHeightLimitView();
+                if (y >= heightLimitView.getBottomY() && y < heightLimitView.getTopY()) {
+                    chunk.setBlockState(mutable.setY(y), state, false);
+                    if (!state.getFluidState().isEmpty()) {
+                        chunk.markBlockForPostProcessing(mutable);
+                    }
+                }
+
             }
 
-            // We are in solid land now. Skip Bedrock as we shouldn't replace that
-            else if (currentBlockInWorld.getBlock() != Blocks.BEDROCK) {
-                // -1 depth means we are switching from air to solid land. Place the surface block now
-                if (depth == -1) {
-                    // Signal that depth is now on the surface so we can start placing middle blocks when moving down next loop.
-                    depth = 0;
+            public String toString() {
+                return "ChunkBlockColumn " + chunkPos;
+            }
+        };
+        Objects.requireNonNull(biomeAccess);
 
-                    // The typical normal dry surface of the biome.
-                    if(y >= seaLevel - 1){
-                        chunk.setBlockState(mutable, topBlock, false);
+        for(int k = 0; k < 16; ++k) {
+            for(int l = 0; l < 16; ++l) {
+                int m = i + k;
+                int n = j + l;
+                int o = chunk.sampleHeightmap(Heightmap.Type.WORLD_SURFACE_WG, k, l) + 1;
+                mutable.setX(m).setZ(n);
+
+                int p = chunk.sampleHeightmap(Heightmap.Type.WORLD_SURFACE_WG, k, l) + 1;
+                int r = Integer.MIN_VALUE;
+                int t = chunk.getBottomY();
+
+                for(int u = p; u >= t; --u) {
+                    BlockState blockState = blockColumn.getState(u);
+                    if (blockState.isAir()) {
+                        r = Integer.MIN_VALUE;
+                    } else if (!blockState.getFluidState().isEmpty()) {
+                        if (r == Integer.MIN_VALUE) {
+                            r = u + 1;
+                        }
+                    } else {
+                        FastNoiseLite noiseLite = new FastNoiseLite();
+                        int scaledNoise = (int) (noiseLite.GetNoise(k, u, l) / 3.0D + 3.0D + random.split(k, u, l).nextDouble() * 0.25D);
+                        if (blockColumn.getState(u) != Blocks.BEDROCK.getDefaultState()) {
+                            // -1 depth means we are switching from air to solid land. Place the surface block now
+                            if (o <= scaledNoise) {
+                                // The typical normal dry surface of the biome.
+                                if (o >= u - 1) {
+                                    chunk.setBlockState(mutable, getTopMaterial(chunk), false);
+                                }
+                                // Places middle block when starting to go under sealevel.
+                                // Think of this as the top block of the bottom of shallow lakes in your biome.
+                                else if (o >= u - 7) {
+                                    chunk.setBlockState(mutable, getMidMaterial(chunk), false);
+                                }
+                                // Places the underwater block when really deep under sealevel instead.
+                                // This is like the top block of the sea floor.
+                                else {
+                                    chunk.setBlockState(mutable, getBottomMaterial(chunk), false);
+                                }
+                            } else {
+                                chunk.setBlockState(mutable, getBottomMaterial(chunk), false);
+                            }
+                        }
                     }
-                    // Places middle block when starting to go under sealevel.
-                    // Think of this as the top block of the bottom of shallow lakes in your biome.
-                    else if(y >= seaLevel - scaledNoise - 7){
-                        chunk.setBlockState(mutable, middleBlock, false);
-                    }
-                    // Places the underwater block when really deep under sealevel instead.
-                    // This is like the top block of the sea floor.
-                    else{
-                        chunk.setBlockState(mutable, underwaterBlock, false);
-                    }
-                }
-                // Place block only when under surface and down to as deep as the scaledNoise says to go.
-                else if (depth <= scaledNoise) {
-                    // Increment depth to keep track of how deep we have gone
-                    depth++;
-                    chunk.setBlockState(mutable, middleBlock, false);
-                }
-                // Place the default block if not placing top, middle, or underwater block anymore.
-                else {
-                    chunk.setBlockState(mutable, defaultBlock, false);
                 }
             }
         }

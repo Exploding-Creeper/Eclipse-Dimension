@@ -1,12 +1,7 @@
 {
-  "surface_builder": "eclipse:eclipse_surface_builder",
-  "depth": 0.125,
-  "scale": 0.05,
   "temperature": 0.8,
   "downfall": 0.4,
   "precipitation": "rain",
-  "category": "none",
-  "player_spawn_friendly": true,
   "effects": {
     "sky_color": 16777215,
     "fog_color": 16777215,
@@ -21,7 +16,6 @@
       "offset": 2
     }
   },
-  "starts": [],
   "spawners": {
     "monster": [],
     "creature": [
@@ -90,25 +84,14 @@
   },
   "features": [
     [],
-    [
-      "minecraft:lake_water"
-    ],
-    [
-      "minecraft:amethyst_geode"
-    ],
     [],
     [],
     [],
     [],
-    [
-      "minecraft:rare_dripstone_cluster",
-      "minecraft:rare_small_dripstone"
-    ],
-    [
-      "minecraft:glow_lichen"
-    ],
-    [
-      "minecraft:freeze_top_layer"
-    ]
+    [],
+    [],
+    [],
+    [],
+    []
   ]
 }

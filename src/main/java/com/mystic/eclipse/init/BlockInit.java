@@ -20,24 +20,12 @@ public class BlockInit {
     }
     //Tint Colors
     public static void registerBlockTintColors() {
-        ColorProviderRegistry.BLOCK.register((state, world, pos, tintIndex) -> {
-            return 0x707070;
-        }, DARK_DIRT_BLOCK);
-        ColorProviderRegistry.BLOCK.register((state, world, pos, tintIndex) -> {
-            return 0xCDCDCD;
-        }, LIGHT_DIRT_BLOCK);
-        ColorProviderRegistry.BLOCK.register((state, world, pos, tintIndex) -> {
-            return 0x929292;
-        }, TWILIGHT_DIRT_BLOCK);
-        ColorProviderRegistry.BLOCK.register((state, world, pos, tintIndex) -> {
-            return 0x707070;
-        }, DARK_GRASS_BLOCK);
-        ColorProviderRegistry.BLOCK.register((state, world, pos, tintIndex) -> {
-            return 0xCDCDCD;
-        },  LIGHT_GRASS_BLOCK);
-        ColorProviderRegistry.BLOCK.register((state, world, pos, tintIndex) -> {
-            return 0x929292;
-        }, TWILIGHT_GRASS_BLOCK);
+        ColorProviderRegistry.BLOCK.register((state, world, pos, tintIndex) -> 0x707070, DARK_DIRT_BLOCK);
+        ColorProviderRegistry.BLOCK.register((state, world, pos, tintIndex) -> 0xCDCDCD, LIGHT_DIRT_BLOCK);
+        ColorProviderRegistry.BLOCK.register((state, world, pos, tintIndex) -> 0x929292, TWILIGHT_DIRT_BLOCK);
+        ColorProviderRegistry.BLOCK.register((state, world, pos, tintIndex) -> 0x707070, DARK_GRASS_BLOCK);
+        ColorProviderRegistry.BLOCK.register((state, world, pos, tintIndex) -> 0xCDCDCD,  LIGHT_GRASS_BLOCK);
+        ColorProviderRegistry.BLOCK.register((state, world, pos, tintIndex) -> 0x929292, TWILIGHT_GRASS_BLOCK);
 
     }
     //Blocks

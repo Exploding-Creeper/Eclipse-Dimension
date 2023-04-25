@@ -22,7 +22,7 @@ accessible method net/minecraft/world/chunk/light/SkyLightStorage isSectionEnabl
 accessible field net/minecraft/world/chunk/light/LightStorage chunkProvider Lnet/minecraft/world/chunk/ChunkProvider;
 extendable class net/minecraft/world/chunk/light/ChunkSkyLightProvider
 accessible method net/minecraft/world/chunk/light/LightStorage hasSection (J)Z
-accessible method net/minecraft/world/chunk/light/LightStorage getLightSection (J)Lnet/minecraft/world/chunk/ChunkNibbleArray;
+accessible method net/minecraft/world/gen/chunk/ChunkNoiseSampler sampleBlockState ()Lnet/minecraft/block/BlockState;
 accessible method net/minecraft/world/chunk/light/SkyLightStorage method_31931 (JZ)I
 accessible method net/minecraft/world/chunk/light/LightStorage updateAll ()V
 accessible method net/minecraft/world/chunk/light/SkyLightStorage isAtOrAboveTopmostSection (J)Z
@@ -36,3 +36,4 @@ extendable class net/minecraft/world/chunk/light/ChunkBlockLightProvider
 accessible method net/minecraft/world/chunk/light/ChunkBlockLightProvider getLightSourceLuminance (J)I
 accessible field net/minecraft/client/render/chunk/ChunkRendererRegion world Lnet/minecraft/world/World;
 extendable method net/minecraft/world/chunk/light/LevelPropagator getPropagatedLevel (JJI)I
+accessible class net/minecraft/world/gen/densityfunction/DensityFunctionTypes$Beardifier

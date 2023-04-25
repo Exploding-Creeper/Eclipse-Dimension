@@ -2,23 +2,24 @@ package com.mystic.eclipse.blocks;
 
 import com.mystic.eclipse.init.BlockInit;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
-import net.fabricmc.fabric.api.tool.attribute.v1.FabricToolTags;
-import net.minecraft.block.*;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
+import net.minecraft.block.SnowBlock;
+import net.minecraft.block.SpreadableBlock;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.BlockSoundGroup;
 import net.minecraft.tag.FluidTags;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
+import net.minecraft.util.math.random.Random;
 import net.minecraft.world.WorldView;
 import net.minecraft.world.chunk.light.ChunkLightProvider;
-
-import java.util.Random;
 
 public class TwilightGrassBlock extends SpreadableBlock {
     public TwilightGrassBlock(FabricBlockSettings properties) {
         super(properties
                 .sounds(BlockSoundGroup.GRASS)
-                .breakByTool(FabricToolTags.SHOVELS, 1)
+               // .breakByTool(FabricToolTags.SHOVELS, 1)
                 .requiresTool()
                 .strength(1.5F, 3.5F)
                 .ticksRandomly());

@@ -3,9 +3,7 @@ package com.mystic.eclipse;
 import com.mystic.eclipse.creativetab.EclipseGroup;
 import com.mystic.eclipse.init.BlockInit;
 import com.mystic.eclipse.init.ItemInit;
-import com.mystic.eclipse.mixin.GeneratorTypeAccessor;
 import com.mystic.eclipse.utils.Reference;
-import com.mystic.eclipse.worldgen.biomes.EclipseBiomeSource;
 import com.mystic.eclipse.worldgen.chunkgenerators.SplitChunkGenerator;
 import com.mystic.eclipse.worldgen.dimension.EclipseDimension;
 import net.fabricmc.api.ModInitializer;
@@ -29,8 +27,6 @@ public class EclipseMain implements ModInitializer {
 		EclipseGroup.init();
 		EclipseDimension.registerBiomeSources();
 		Registry.register(Registry.CHUNK_GENERATOR, "eclipse:eclipse", SplitChunkGenerator.CODEC);
-		GeneratorTypeAccessor.getValues().add(SplitChunkGenerator.eclipse);
-		EclipseDimension.setupSurfaceBuilders();
 		EclipseDimension.init();
 	}
 }
