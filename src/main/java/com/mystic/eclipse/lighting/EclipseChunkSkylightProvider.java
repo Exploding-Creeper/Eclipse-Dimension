@@ -1,6 +1,5 @@
 package com.mystic.eclipse.lighting;
 
-import net.minecraft.block.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.chunk.ChunkProvider;
 import net.minecraft.world.chunk.light.ChunkSkyLightProvider;
