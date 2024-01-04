@@ -1,15 +1,16 @@
 package com.mystic.eclipse.init;
 
 import com.mystic.eclipse.blocks.*;
+import com.mystic.eclipse.creativetab.EclipseGroup;
 import com.mystic.eclipse.utils.Reference;
 import net.fabricmc.fabric.api.client.rendering.v1.ColorProviderRegistry;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.minecraft.block.Block;
-import net.minecraft.block.Material;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
 
 import java.util.Objects;
 import java.util.function.Function;
@@ -29,19 +30,20 @@ public class BlockInit {
 
     }
     //Blocks
-    public static final DarkStoneBlock DARK_STONE_BLOCK = (DarkStoneBlock) register("dark_stone", new DarkStoneBlock(FabricBlockSettings.of(Material.STONE)));
-    public static final LightStoneBlock LIGHT_STONE_BLOCK = (LightStoneBlock) register("light_stone", new LightStoneBlock(FabricBlockSettings.of(Material.STONE)));
-    public static final TwilightStoneBlock TWILIGHT_STONE_BLOCK = (TwilightStoneBlock) register("twilight_stone", new TwilightStoneBlock(FabricBlockSettings.of(Material.STONE)));
-    public static final DarkDirtBlock DARK_DIRT_BLOCK = (DarkDirtBlock) register("dark_dirt", new DarkDirtBlock(FabricBlockSettings.of(Material.SOIL)));
-    public static final LightDirtBlock LIGHT_DIRT_BLOCK = (LightDirtBlock) register("light_dirt", new LightDirtBlock(FabricBlockSettings.of(Material.SOIL)));
-    public static final TwilightDirtBlock TWILIGHT_DIRT_BLOCK = (TwilightDirtBlock) register("twilight_dirt", new TwilightDirtBlock(FabricBlockSettings.of(Material.SOIL)));
-    public static final DarkGrassBlock DARK_GRASS_BLOCK = (DarkGrassBlock) register("dark_grass_block", new DarkGrassBlock(FabricBlockSettings.of(Material.SOLID_ORGANIC)));
-    public static final LightGrassBlock LIGHT_GRASS_BLOCK = (LightGrassBlock) register("light_grass_block", new LightGrassBlock(FabricBlockSettings.of(Material.SOLID_ORGANIC)));
-    public static final TwilightGrassBlock TWILIGHT_GRASS_BLOCK = (TwilightGrassBlock) register("twilight_grass_block", new TwilightGrassBlock(FabricBlockSettings.of(Material.SOLID_ORGANIC)));
+    public static final DarkStoneBlock DARK_STONE_BLOCK = (DarkStoneBlock) register("dark_stone", new DarkStoneBlock(FabricBlockSettings.create()));
+    public static final LightStoneBlock LIGHT_STONE_BLOCK = (LightStoneBlock) register("light_stone", new LightStoneBlock(FabricBlockSettings.create()));
+    public static final TwilightStoneBlock TWILIGHT_STONE_BLOCK = (TwilightStoneBlock) register("twilight_stone", new TwilightStoneBlock(FabricBlockSettings.create()));
+    public static final DarkDirtBlock DARK_DIRT_BLOCK = (DarkDirtBlock) register("dark_dirt", new DarkDirtBlock(FabricBlockSettings.create()));
+    public static final LightDirtBlock LIGHT_DIRT_BLOCK = (LightDirtBlock) register("light_dirt", new LightDirtBlock(FabricBlockSettings.create()));
+    public static final TwilightDirtBlock TWILIGHT_DIRT_BLOCK = (TwilightDirtBlock) register("twilight_dirt", new TwilightDirtBlock(FabricBlockSettings.create()));
+    public static final DarkGrassBlock DARK_GRASS_BLOCK = (DarkGrassBlock) register("dark_grass_block", new DarkGrassBlock(FabricBlockSettings.create()));
+    public static final LightGrassBlock LIGHT_GRASS_BLOCK = (LightGrassBlock) register("light_grass_block", new LightGrassBlock(FabricBlockSettings.create()));
+    public static final TwilightGrassBlock TWILIGHT_GRASS_BLOCK = (TwilightGrassBlock) register("twilight_grass_block", new TwilightGrassBlock(FabricBlockSettings.create()));
 
     private static Block baseRegister(String name, Block block, Function<Block, Item> item) {
-        Registry.register(Registry.BLOCK, new Identifier(Reference.MODID, name), block);
+        Registry.register(Registries.BLOCK, new Identifier(Reference.MODID, name), block);
         register(name, item.apply(block));
+        EclipseGroup.addToMainTab(block.asItem());
         return block;
     }
 
@@ -50,7 +52,7 @@ public class BlockInit {
     }
 
     private static Block blockOnlyRegistry(String name, Block block) {
-        return Registry.register(Registry.BLOCK, new Identifier(Reference.MODID, name), block);
+        return Registry.register(Registries.BLOCK, new Identifier(Reference.MODID, name), block);
     }
 
     private static BlockItem registerBlockItem(Block block) {
@@ -58,6 +60,6 @@ public class BlockInit {
     }
 
     public static Item register(String name, Item item) {
-        return Registry.register(Registry.ITEM, new Identifier(Reference.MODID, name), item);
+        return Registry.register(Registries.ITEM, new Identifier(Reference.MODID, name), item);
     }
 }

@@ -7,18 +7,13 @@ import com.mystic.eclipse.worldgen.surfacebuilders.EclipseSurfaceBuilder;
 import net.minecraft.SharedConstants;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
-import net.minecraft.structure.StructureSet;
-import net.minecraft.util.dynamic.RegistryOps;
+import net.minecraft.registry.Registry;
+import net.minecraft.registry.RegistryKeys;
+import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.noise.DoublePerlinNoiseSampler;
 import net.minecraft.util.math.random.CheckedRandom;
-import net.minecraft.util.math.random.ChunkRandom;
-import net.minecraft.util.math.random.Random;
-import net.minecraft.util.math.random.RandomSplitter;
-import net.minecraft.util.registry.Registry;
-import net.minecraft.util.registry.RegistryEntry;
+import net.minecraft.util.math.random.RandomSeed;
 import net.minecraft.world.ChunkRegion;
 import net.minecraft.world.HeightLimitView;
 import net.minecraft.world.Heightmap;
@@ -31,14 +26,12 @@ import net.minecraft.world.gen.HeightContext;
 import net.minecraft.world.gen.StructureAccessor;
 import net.minecraft.world.gen.StructureWeightSampler;
 import net.minecraft.world.gen.chunk.*;
-import net.minecraft.world.gen.densityfunction.DensityFunction;
 import net.minecraft.world.gen.densityfunction.DensityFunctionTypes;
 import net.minecraft.world.gen.noise.NoiseConfig;
 import org.apache.commons.lang3.mutable.MutableObject;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.OptionalInt;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
@@ -49,21 +42,17 @@ public class SplitChunkGenerator extends ChunkGenerator {
     private final BlockState defaultBlockThree = BlockInit.TWILIGHT_STONE_BLOCK.getDefaultState();
     private final BlockState defaultBlockTwo = BlockInit.LIGHT_STONE_BLOCK.getDefaultState();
     protected final RegistryEntry<ChunkGeneratorSettings> settings;
-    private final Registry<DoublePerlinNoiseSampler.NoiseParameters> noiseRegistry;
 
     public static final Codec<SplitChunkGenerator> CODEC = RecordCodecBuilder.create((instance) -> {
-        return createStructureSetRegistryGetter(instance).and(instance.group(RegistryOps.createRegistryCodec(Registry.NOISE_KEY).forGetter((generator) -> {
-            return generator.noiseRegistry;
-        }), BiomeSource.CODEC.fieldOf("biome_source").forGetter((generator) -> {
+        return instance.group(BiomeSource.CODEC.fieldOf("biome_source").forGetter((generator) -> {
             return generator.biomeSource;
         }), ChunkGeneratorSettings.REGISTRY_CODEC.fieldOf("settings").forGetter((generator) -> {
             return generator.settings;
-        }))).apply(instance, instance.stable(SplitChunkGenerator::new));
+        })).apply(instance, instance.stable(SplitChunkGenerator::new));
     });
 
-    private SplitChunkGenerator(Registry<StructureSet> structureSets, Registry<DoublePerlinNoiseSampler.NoiseParameters> noiseParameters, BiomeSource biomeSource, RegistryEntry<ChunkGeneratorSettings> settings) {
-        super(structureSets, Optional.empty(), biomeSource);
-        this.noiseRegistry = noiseParameters;
+    public SplitChunkGenerator(BiomeSource biomeSource, RegistryEntry<ChunkGeneratorSettings> settings) {
+        super(biomeSource);
         this.settings = settings;
     }
 
@@ -79,14 +68,14 @@ public class SplitChunkGenerator extends ChunkGenerator {
     public void buildSurface(ChunkRegion region, StructureAccessor structures, NoiseConfig noiseConfig, Chunk chunk) {
         if (!SharedConstants.isOutsideGenerationArea(chunk.getPos())) {
             HeightContext heightContext = new HeightContext(this, region);
-            this.buildSurface(chunk, heightContext, noiseConfig, structures, region.getBiomeAccess(), region.getRegistryManager().get(Registry.BIOME_KEY), Blender.getBlender(region));
+            this.buildSurface(chunk, heightContext, noiseConfig, structures, region.getBiomeAccess(), region.getRegistryManager().get(RegistryKeys.BIOME), Blender.getBlender(region));
         }
     }
 
     public void buildSurface(Chunk chunk, HeightContext heightContext, NoiseConfig noiseConfig, StructureAccessor structureAccessor, BiomeAccess biomeAccess, Registry<Biome> biomeRegistry, Blender blender) {
         ChunkNoiseSampler chunkNoiseSampler = chunk.getOrCreateChunkNoiseSampler((chunkx) -> this.createChunkNoiseSampler(chunkx, structureAccessor, blender, noiseConfig));
         ChunkGeneratorSettings chunkGeneratorSettings = this.settings.value();
-        new EclipseSurfaceBuilder(noiseConfig, Blocks.PUMPKIN.getDefaultState(), 0, new CheckedRandom(noiseConfig.getLegacyWorldSeed()).nextSplitter()).buildSurface(noiseConfig, biomeAccess, biomeRegistry, chunkGeneratorSettings.usesLegacyRandom(), heightContext, chunk, chunkNoiseSampler, chunkGeneratorSettings.surfaceRule());
+        new EclipseSurfaceBuilder(noiseConfig, Blocks.PUMPKIN.getDefaultState(), 0, new CheckedRandom(RandomSeed.getSeed()).nextSplitter()).buildSurface(noiseConfig, biomeAccess, biomeRegistry, chunkGeneratorSettings.usesLegacyRandom(), heightContext, chunk, chunkNoiseSampler, chunkGeneratorSettings.surfaceRule());
     }
 
     private ChunkNoiseSampler createChunkNoiseSampler(Chunk chunk, StructureAccessor world, Blender blender, NoiseConfig noiseConfig) {
@@ -191,7 +180,7 @@ public class SplitChunkGenerator extends ChunkGenerator {
 
     private OptionalInt sampleHeightmap(HeightLimitView world, NoiseConfig noiseConfig, int x, int z, @Nullable MutableObject<VerticalBlockSample> columnSample, @Nullable Predicate<BlockState> stopPredicate) {
         GenerationShapeConfig generationShapeConfig = this.settings.value().generationShapeConfig().trimHeight(world);
-        int i = generationShapeConfig.verticalBlockSize();
+        int i = generationShapeConfig.verticalSize();
         int j = generationShapeConfig.minimumY();
         int k = MathHelper.floorDiv(j, i);
         int l = MathHelper.floorDiv(generationShapeConfig.height(), i);
@@ -206,7 +195,7 @@ public class SplitChunkGenerator extends ChunkGenerator {
                 columnSample.setValue(new VerticalBlockSample(j, blockStates));
             }
 
-            int m = generationShapeConfig.horizontalBlockSize();
+            int m = generationShapeConfig.horizontalSize();
             int n = Math.floorDiv(x, m);
             int o = Math.floorDiv(z, m);
             int p = Math.floorMod(x, m);
@@ -216,18 +205,18 @@ public class SplitChunkGenerator extends ChunkGenerator {
             double d = (double)p / (double)m;
             double e = (double)q / (double)m;
             ChunkNoiseSampler chunkNoiseSampler = new ChunkNoiseSampler(1, noiseConfig, r, s, generationShapeConfig, DensityFunctionTypes.Beardifier.INSTANCE, this.settings.value(), (x1, y, z1) -> new AquiferSampler.FluidLevel(y, Blocks.WATER.getDefaultState()), Blender.getNoBlending());
-            chunkNoiseSampler.sampleStartNoise();
-            chunkNoiseSampler.sampleEndNoise(0);
+            chunkNoiseSampler.sampleStartDensity();
+            chunkNoiseSampler.sampleEndDensity(0);
 
             for(int t = l - 1; t >= 0; --t) {
-                chunkNoiseSampler.sampleNoiseCorners(t, 0);
+                chunkNoiseSampler.onSampledCellCorners(t, 0);
 
                 for(int u = i - 1; u >= 0; --u) {
                     int v = (k + t) * i + u;
                     double f = (double)u / (double)i;
-                    chunkNoiseSampler.sampleNoiseY(v, f);
-                    chunkNoiseSampler.sampleNoiseX(x, d);
-                    chunkNoiseSampler.sampleNoiseZ(z, e);
+                    chunkNoiseSampler.interpolateY(v, f);
+                    chunkNoiseSampler.interpolateX(x, d);
+                    chunkNoiseSampler.interpolateZ(z, e);
                     BlockState blockState = chunkNoiseSampler.sampleBlockState();
                     BlockState blockState2 = blockState == null ? this.defaultBlock : blockState;
                     if (blockStates != null) {

@@ -4,7 +4,6 @@
 	"package": "com.mystic.eclipse.mixin",
 	"compatibilityLevel": "JAVA_17",
 	"mixins": [
-		"LightingProviderMixin"
 	],
 	"client": [
 		"DimensionEffectsMixin"

@@ -1,26 +1,23 @@
 package com.mystic.eclipse.worldgen.biomes;
 
+import com.mojang.datafixers.kinds.App;
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.DynamicOps;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.mystic.eclipse.utils.Reference;
+import net.minecraft.registry.*;
+import net.minecraft.registry.entry.RegistryEntry;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.dynamic.RegistryOps;
-import net.minecraft.util.registry.Registry;
-import net.minecraft.util.registry.RegistryEntry;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.BiomeKeys;
 import net.minecraft.world.biome.source.BiomeSource;
 import net.minecraft.world.biome.source.util.MultiNoiseUtil;
 
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class EclipseBiomeSource extends BiomeSource {
-    public static final Codec<EclipseBiomeSource> CODEC = RecordCodecBuilder.create((instance) -> instance.group
-            (RegistryOps.createRegistryCodec(Registry.BIOME_KEY).forGetter(
-                    (biomeSource) -> biomeSource.BIOME_REGISTRY), Codec.intRange(1, 20).fieldOf("biome_size").orElse(2).forGetter(
-                    (biomeSource) -> biomeSource.biomeSize), Codec.LONG.fieldOf("seed").stable().forGetter(
-                    (biomeSource) -> biomeSource.seed)).apply(instance, instance.stable(EclipseBiomeSource::new)));
+    public static final Codec<EclipseBiomeSource> CODEC = Codec.unit(EclipseBiomeSource::new);
 
     public static final Identifier TWILIGHT_ZONE_BIOME = new Identifier(Reference.MODID, "twilight_zone_biome");
     public static final Identifier NUCLEAR_WASTE_BIOME = new Identifier(Reference.MODID, "nuclear_waste_biome");
@@ -32,23 +29,25 @@ public class EclipseBiomeSource extends BiomeSource {
     public static final Identifier GARDEN_BIOME = new Identifier(Reference.MODID, "garden_biome");
     public static final Identifier CLOUD_BIOME = new Identifier(Reference.MODID, "cloud_biome");
     public static Registry<Biome> BIOME_REGISTRY;
-    public Registry<Biome> LAYERS_BIOME_REGISTRY;
-    private long seed;
-    private int biomeSize;
 
-    public EclipseBiomeSource(Registry<Biome> biomeRegistry, int biomeSize, long seed) {
-        super(Stream.of(RegistryEntry.of(biomeRegistry.stream().reduce(
-                (resourceLocation, resourceLocation2) -> resourceLocation).orElse(biomeRegistry.get(BiomeKeys.THE_VOID))
-        )).collect(Collectors.toList()));
-        BIOME_REGISTRY = biomeRegistry;
-        this.LAYERS_BIOME_REGISTRY = biomeRegistry;
-        this.biomeSize = biomeSize;
-        this.seed = seed;
+    public EclipseBiomeSource() {
+        super();
+    }
+
+    public static void setupBiomeRegistry(MinecraftServer server) {
+        BIOME_REGISTRY = server.getRegistryManager().get(RegistryKeys.BIOME);
     }
 
     @Override
     protected Codec<? extends BiomeSource> getCodec() {
         return CODEC;
+    }
+
+    @Override
+    protected Stream<RegistryEntry<Biome>> biomeStream() {
+        return Stream.of(RegistryEntry.of(BIOME_REGISTRY.stream().reduce(
+                (resourceLocation, resourceLocation2) -> resourceLocation).orElse(BIOME_REGISTRY.get(BiomeKeys.THE_VOID))
+        ));
     }
 
     private static RegistryEntry<Biome> getHolderBiome(Identifier resourceLocationBiome) {

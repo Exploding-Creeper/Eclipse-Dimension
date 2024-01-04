@@ -1,18 +1,21 @@
 package com.mystic.eclipse.init;
 
+import com.mystic.eclipse.creativetab.EclipseGroup;
 import com.mystic.eclipse.items.EclipseMusicDiscItem;
 import com.mystic.eclipse.utils.Reference;
 
 import net.minecraft.item.Item;
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.Rarity;
-import net.minecraft.util.registry.Registry;
 
 public class ItemInit {
     public static void init(){}
 
     public static Item register(String name, Item item) {
-        return Registry.register(Registry.ITEM, new Identifier(Reference.MODID, name), item);
+        EclipseGroup.addToMainTab(item);
+        return Registry.register(Registries.ITEM, new Identifier(Reference.MODID, name), item);
     }
 
     private static final Item.Settings ECLIPSE_SETTINGS = new Item.Settings().maxCount(1).rarity(Rarity.UNCOMMON).maxCount(1);

@@ -6,7 +6,7 @@ import net.minecraft.util.math.Vec3d;
 public class EclipseDimensionSky extends DimensionEffects {
 
 	public EclipseDimensionSky() {
-		super(160.0F, false, SkyType.NONE, false, false);
+		super(Float.NaN, false, SkyType.NONE, false, false);
 	}
 
 	@Override
@@ -18,5 +18,4 @@ public class EclipseDimensionSky extends DimensionEffects {
 	public boolean useThickFog(int var1, int var2) {
 		return false;
 	}
-
 }
