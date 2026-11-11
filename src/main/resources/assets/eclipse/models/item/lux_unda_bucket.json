@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "eclipse:item/lux_unda_bucket"
+  }
+}

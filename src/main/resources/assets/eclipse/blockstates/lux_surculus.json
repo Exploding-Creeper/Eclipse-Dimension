@@ -1,0 +1,6 @@
+{
+  "variants": {
+    "stage=0": { "model": "eclipse:block/lux_surculus" },
+    "stage=1": { "model": "eclipse:block/lux_surculus" }
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "replace": false,
+  "values": [
+    "eclipse:nyx_surculus",
+    "eclipse:sol_surculus",
+    "eclipse:lux_surculus"
+  ]
+}

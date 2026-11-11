@@ -1,0 +1,11 @@
+{
+  "replace": false,
+  "values": [
+    "eclipse:nyx_unda",
+    "eclipse:nyx_unda_flowing",
+    "eclipse:sol_unda",
+    "eclipse:sol_unda_flowing",
+    "eclipse:lux_unda",
+    "eclipse:lux_unda_flowing"
+  ]
+}

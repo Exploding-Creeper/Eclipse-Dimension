@@ -1,0 +1,11 @@
+{
+  "replace": false,
+  "values": [
+    "eclipse:nyx_humus",
+    "eclipse:sol_humus",
+    "eclipse:lux_humus",
+    "eclipse:nyx_sero",
+    "eclipse:sol_sero",
+    "eclipse:lux_sero"
+  ]
+}

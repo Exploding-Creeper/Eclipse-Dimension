@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cube_column",
+  "textures": {
+    "end": "eclipse:block/sol_truncus_top",
+    "side": "eclipse:block/sol_truncus"
+  }
+}

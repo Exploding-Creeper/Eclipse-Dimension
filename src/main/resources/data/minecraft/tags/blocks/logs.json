@@ -1,0 +1,8 @@
+{
+  "replace": false,
+  "values": [
+    "eclipse:nyx_truncus",
+    "eclipse:sol_truncus",
+    "eclipse:lux_truncus"
+  ]
+}

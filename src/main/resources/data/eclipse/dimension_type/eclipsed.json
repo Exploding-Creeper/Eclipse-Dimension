@@ -9,7 +9,6 @@
   "has_ceiling": false,
   "coordinate_scale": 1,
   "ambient_light": 0,
-  "fixed_time": 2000,
   "logical_height": 383,
   "effects": "eclipse:eclipsed",
   "infiniburn": "#minecraft:infiniburn_overworld",

@@ -1,20 +1,20 @@
 package com.mystic.eclipse.init;
 
 import com.mystic.eclipse.utils.Reference;
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.Registry;
-import net.minecraft.sound.SoundEvent;
-import net.minecraft.util.Identifier;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraftforge.registries.DeferredRegister;
+import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.RegistryObject;
 
 public class SoundInit {
+    public static final DeferredRegister<SoundEvent> SOUNDS = DeferredRegister.create(ForgeRegistries.SOUND_EVENTS, Reference.MODID);
 
-    //MUSIC DISC SOUNDS
-    public static final SoundEvent WHITEWASH = register("music_disc.whitewash");
-    public static final SoundEvent DAWNLIGHT = register("music_disc.dawnlight");
-    public static final SoundEvent DOWNTIME = register("music_disc.downtime");
+    public static final RegistryObject<SoundEvent> WHITEWASH = register("music_disc.whitewash");
+    public static final RegistryObject<SoundEvent> DAWNLIGHT = register("music_disc.dawnlight");
+    public static final RegistryObject<SoundEvent> DOWNTIME = register("music_disc.downtime");
 
-    private static SoundEvent register(String name) {
-        Identifier id = new Identifier(Reference.MODID, name);
-        return Registry.register(Registries.SOUND_EVENT, id, SoundEvent.of(id));
+    private static RegistryObject<SoundEvent> register(String name) {
+        return SOUNDS.register(name, () -> SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath(Reference.MODID, name)));
     }
 }

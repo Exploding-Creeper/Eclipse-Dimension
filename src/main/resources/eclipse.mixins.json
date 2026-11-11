@@ -1,14 +1,24 @@
 {
-	"required": true,
-	"minVersion": "0.8",
-	"package": "com.mystic.eclipse.mixin",
-	"compatibilityLevel": "JAVA_17",
-	"mixins": [
-	],
-	"client": [
-		"DimensionEffectsMixin"
-	],
-	"injectors": {
-		"defaultRequire": 1
-	}
+  "required": true,
+  "minVersion": "0.8",
+  "package": "com.mystic.eclipse.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "refmap": "eclipse.refmap.json",
+  "mixins": [
+    "NoiseChunkAccess",
+    "StructureManagerAccess",
+    "EclipseRawBrightnessMixin",
+    "EclipseSeaFluidMixin",
+    "EclipsePlacementMixin",
+    "EclipseBucketMixin"
+  ],
+  "client": [
+    "EclipseCloudColorMixin",
+    "EclipseLightmapMixin",
+    "EclipseSkyBrightnessMixin",
+    "EclipseDebugLightMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
 }

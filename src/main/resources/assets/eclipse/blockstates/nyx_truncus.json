@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "axis=y": { "model": "eclipse:block/nyx_truncus" },
+    "axis=z": { "model": "eclipse:block/nyx_truncus", "x": 90 },
+    "axis=x": { "model": "eclipse:block/nyx_truncus", "x": 90, "y": 90 }
+  }
+}

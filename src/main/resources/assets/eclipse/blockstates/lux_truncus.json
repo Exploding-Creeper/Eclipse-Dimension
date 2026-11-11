@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "axis=y": { "model": "eclipse:block/lux_truncus" },
+    "axis=z": { "model": "eclipse:block/lux_truncus", "x": 90 },
+    "axis=x": { "model": "eclipse:block/lux_truncus", "x": 90, "y": 90 }
+  }
+}
